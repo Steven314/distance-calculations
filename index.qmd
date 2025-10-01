@@ -1,0 +1,556 @@
+---
+title: "Distance Calculations in Spatial Analysis"
+subtitle: "Application in R"
+author:
+  - given: S. L.
+    family: Carter
+institute: University of Toledo
+date: 2025-10-01
+date-format: long
+format:
+  revealjs:
+    margin-top: "0.05"
+    smaller: true
+    scrollable: true
+    slide-number: true
+    css: style.css
+    mainfont: serif
+    echo: false
+    preview-links: true
+    footer: SISS7020
+editor_options: 
+  chunk_output_type: console
+---
+
+# Introduction
+
+## Objectives 
+
+::: {.incremental}
+1. Understand why considering distance is important.
+2. Understand the different types of distance calculations.
+3. Know how to apply the calculations in software.
+:::
+
+
+## Motivation
+
+Why should we care about distance?
+
+![Salt Lake City, Utah at Night ([NASA2Explore on Flickr](https://www.flickr.com/photos/nasa2explore/11802833823))](images/city-grid.jpg){fig-align="center" width="50%"}
+
+## Real Life Example
+
+Say you need to go to the grocery store.
+
+. . .
+
+What factors do you consider when deciding which store to pick?
+
+. . .
+
+::: {.panel-tabset}
+
+### Factors
+
+1. Prices/Value of Groceries
+2. Location
+3. Available Modes and Costs of Transportation
+4. Personal Preference
+
+### Map
+
+<iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d46292.00611085444!2d-83.62762421690506!3d41.66172841621049!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sgrocery%20store!5e1!3m2!1sen!2sus!4v1758388765125!5m2!1sen!2sus" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+:::
+
+## Statistical Example
+
+::: {.callout-caution title="College Enrollment Choices"}
+
+Students consider distance and location when choosing where to go to college.
+
+**Question**: *What kind of relationship could distance have with the probability of enrollment?*
+:::
+
+. . .
+
+::: {.center-x}
+```{python}
+#| label: fig-stat-example
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(1, 10, 50)
+
+y1 = x
+y2 = x[::-1]
+y3 = 10 / x
+
+fig, ax = plt.subplots(figsize = (5, 4))
+
+for y in [y1, y2, y3]:
+  ax.plot(x * 10, y / 10)
+
+ax.set(
+  ylabel = "Probability of Enrollment",
+  xlabel = "Distance From UT (miles)"
+)
+# plt.show()
+```
+:::
+
+## Outline
+
+::: {.callout-note title="Wednesday 10/1/2025"}
+
+- Definition, history, and application of two types of distance in Euclidean geometry.
+  - Plus a game and bonus topic.
+- Basic exploration into using Python/R to calculate distance.
+
+:::
+
+::: {.callout-note title="Monday 10/6/2025"}
+
+- Definition of spherical distance calculations.
+- Lab/Workshop using R to calculate distances for real-life data.
+
+:::
+
+# Distance in Euclidean Geometry
+
+## Types of Distance Calculations
+
+:::{.center-y}
+- Euclidean
+- Manhattan
+- (Bonus) Generalization
+:::
+
+## Euclidean Distance
+
+(Also known as the Pythagorean Distance.)
+
+What is the formula?
+
+. . .
+
+$$
+\begin{aligned}
+d^2 &= {(\Delta x)}^2 + {(\Delta y)}^2 \\
+d &= \sqrt{{(\Delta x)}^2 + {(\Delta y)}^2}
+\end{aligned}
+$$
+
+. . .
+
+What does that look like?
+
+. . .
+
+::: {.center-x}
+```{r}
+#| label: fig-euclidean
+#| fig-asp: 1
+#| fig-width: 3
+#| warning: false
+library(ggplot2)
+
+g1 <- ggplot(data = data.frame(x = c(2, 6), y = c(2, 6))) +
+  geom_point(aes(x, y)) +
+  theme_classic(base_size = 14) +
+  coord_equal(xlim = c(0,7), ylim = c(0,7))
+
+g1 + annotate(
+  geom = "segment",
+  x = 2, 
+  xend = 6,
+  y = 2, 
+  yend = 6,
+  linetype = 2,
+  color = "red",
+)
+```
+:::
+
+## Euclidean Distance (History)
+
+::: {.center-y}
+- Named after Greek mathematician [Euclid](https://en.wikipedia.org/wiki/Euclid) (~300 BC).
+- Similar to the Pythagorean theorem.
+- Published in 1731 by Alexis Clairaut.
+
+:::
+
+## Euclidean Distance (Application)
+
+What would you use this for?
+
+. . .
+
+- Geography: Measuring distance across *flat* surfaces.
+- Physics: Measuring distance between two objects.
+- Computer Science
+  - Clustering algorithms in machine learning.
+  - Similarity metrics. (Easily extended to higher dimensions.)
+
+## Manhattan Distance
+
+What might this be?
+
+*Hint*: Think about the name...
+
+. . .
+
+- Distance following a grid pattern.
+- It is also called the taxicab or city block distance referring to street layouts in large cities.
+
+## Manhattan Distance
+
+What is the formula?
+
+. . .
+
+$$
+d = |x_2 - x_1| + |y_2 - y_1|
+$$
+
+::: {.center-x}
+```{r}
+#| label: fig-manhattan
+#| fig-asp: 1
+#| fig-width: 3
+#| warning: false
+
+g1 + annotate(
+  geom = "segment",
+  x = 2, 
+  xend = 6,
+  y = 2, 
+  yend = 6,
+  linetype = 2,
+  color = "grey",
+) + annotate(
+  geom = "segment",
+  x = 2, xend = 6,
+  y = 2, yend = 2,
+  linetype = 2,
+  color = "red"
+) + annotate(
+  geom = "segment",
+  x = 6, xend = 6,
+  y = 2, yend = 6,
+  linetype = 2,
+  color = "red"
+) + theme(panel.grid = element_line(color = "lightgrey"))
+
+```
+:::
+
+## Manhattan Distance (History)
+
+::: {.center-y}
+- First used in 1757 by Roger Joseph Boscovich.
+- The taxicab name came from Karl Menger in 1952.
+:::
+
+## Manhattan Distance (Application)
+
+::: {.center-y}
+- Regression Analysis
+  - Calculating residuals (one dimensional)
+- Transportation
+  - Driving distance; distance along a path.
+:::
+
+## Side Quest
+
+:::: {.center-y}
+
+- The numbers on a Minesweeper board can be thought of as a count of bombs with a Chebyshev distance of one.
+- Chebyshev distance is basically Manhattan distance but you take the longer of the two dimensions.
+
+::: {.center-x}
+<https://share.google/A8GwhLEpInZkv5YSS>
+
+(or search Minesweeper on Google)
+:::
+
+- Chebyshev distance has application in board games. Think of moving based on a dice roll.
+
+::::
+
+## Visualization
+
+![By Cmglee - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=140170366](https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Minkowski_distance_examples.svg/800px-Minkowski_distance_examples.svg.png)
+
+## *Bonus*: Generalized Distance in Euclidean Geometry
+
+How can we generalize our distance formulas into a single equation?
+
+. . .
+
+$$
+D(X,Y) = \left(\sum_{i=1}^n {|x_i - y_i|}^p \right)^{1/p}
+$$
+
+| $p$ | Distance Type |
+| --- | --- |
+| 1 | Manhattan |
+| 2 | Euclidean |
+| $\infty$ | Chebyshev |
+
+This also connects to [Lebesgue spaces](https://en.wikipedia.org/wiki/Lp_space) ($L^p$) in mathematics.
+
+## Visualization
+
+![By Quartl - Own work, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=17428655](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Vector-p-Norms_qtl1.svg/800px-Vector-p-Norms_qtl1.svg.png)
+
+# Exploration in Python and R
+
+## Manhattan Distance 
+
+$$
+\begin{aligned}
+D(A,B) &= |a_1 - b_1| + |a_2 - b_2| \\
+&= \sum_{i=1}^n |a_i - b_i|
+\end{aligned}
+$$
+
+:::: {.columns}
+::: {.column}
+
+*Python*
+
+```python
+def manhattan(a1, a2, b1, b2):
+  d = abs(a1 - b1) + abs(a2 - b2)
+  
+  return d
+
+def manhattan(a, b):
+  d = sum(abs(a_i - b_i) for a_i, b_i in zip(a,b))
+  
+  return d
+
+from scipy.spatial.distance import cityblock
+```
+
+:::
+::: {.column}
+
+*R*
+
+```r
+manhattan <- function(a1, a2, b1, b2) {
+  d <- abs(a1 - b1) + abs(a2 - b2)
+
+  return(d)
+}
+
+manhattan <- function(a, b) {
+  d <- sum(abs(a - b))
+
+  return(d)
+}
+```
+
+:::
+::::
+
+## Euclidean Distance
+
+$$
+\begin{aligned}
+D(A,B) &= \sqrt{{(a_1 - b_1)}^2 + {(a_2 - b_2)}^2} \\
+&= \left(\sum_{i=1}^n {(a_i - b_i)}^2\right)^{1/2}
+\end{aligned}
+$$
+
+:::: {.columns}
+::: {.column}
+
+*Python*
+
+```python
+import math
+
+def euclidean(a1, a2, b1, b2):
+  d = math.sqrt((a1 - b1)**2 + (a2 - b2)**2)
+  
+  return d
+
+def euclidean(a, b):
+  d = math.sqrt(sum((a_i - b_i)**2 for a_i, b_i in zip(a,b)))
+  
+  return d
+
+from scipy.spatial.distance import euclidean
+```
+
+:::
+::: {.column}
+
+*R*
+
+```r
+euclidean <- function(a1, a2, b1, b2) {
+  d <- sqrt((a1 - b1)^2 + (a2 - b2)^2)
+
+  return(d)
+}
+
+euclidean <- function(a, b) {
+  d <- sqrt(sum((a - b)^2))
+
+  return(d)
+}
+```
+
+:::
+::::
+
+## Homework
+
+::: {.center-y}
+
+- Please install the [`{spData}`](https://jakubnowosad.com/spData/index.html) package for R.
+  It has a dataset which we will be using on Monday.
+  - You will also need [R](https://cran.rstudio.com/),  [`{tidyverse}`](https://www.tidyverse.org/), [`{sf}`](https://r-spatial.github.io/sf/), and [`{geosphere}`](https://github.com/rspatial/geosphere) installed; it is free and works on Windows and Mac just fine (and Linux with some difficulty).
+  - Email me or see me after class tomorrow if would like help with installation.
+- On Monday we will go through calculating distance with Lucas county housing prices.
+
+:::
+
+## Homework (Bonus)
+
+::: {.center-y}
+- Write a Python and/or R function to generalize distance in Euclidean geometry.
+- Try to use the function a few times to make sure it works correctly for $p$ equal to 1, 2, and (optionally) $\infty$.
+- AI should be helpful if you get stuck.
+
+$$
+D(X,Y) = \left(\sum_{i=1}^n {|x_i - y_i|}^p \right)^{1/p}
+$$
+:::
+
+# Spherical Geometry
+
+## Geographical Distance Methods
+
+- There are several levels of complexity to measure distance on Earth.
+  - Euclidean distance. (Think back to last class.)
+  - Spherical distance.
+  - Ellipsoidal distance.
+- The best choice depends on your needed accuracy.
+  - What scenarios would be suited to each type of distance?
+  
+. . .
+
+- Euclidean distance
+  - Local, short-range points; e.g. At a city or neighborhood level.
+- Spherical distance
+  - Longer distances where accuracy is important but not absolutely critical. (Has about 0.5% error, [Wikipedia](https://en.wikipedia.org/wiki/Great-circle_distance#Radius_for_spherical_Earth).)
+- Ellipsoidal distance
+  - Long distances where you want to be *very* accurate.
+  
+## Spherical Distance
+
+It's complicated...
+
+:::: {.columns}
+::: {.column width="30%"}
+![By CheCheDaWaff - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=48462269](https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Central_angle.svg/800px-Central_angle.svg.png)
+
+:::
+
+::: {.column width="70%"}
+$$
+\text{hav}(\Delta\sigma) = \text{hav}(\Delta\phi) + \cos(\phi_1)\cos(\phi_2)\text{hav}(\Delta\lambda)
+$$
+
+- $\phi$ is latitude, $\lambda$ is longitude.
+- $\Delta\sigma$ is the central angle (in degrees) between the points.
+- $\text{hav}(\Delta\sigma) = \sin^2\left(\frac{\Delta\sigma}{2}\right)$
+- Then the distance is $\Delta\sigma$ converted to radians and multiplied by the average radius of the Earth, $D(P,Q) = r \cdot \Delta\sigma$.
+- See [Wikipedia](https://en.wikipedia.org/wiki/Haversine_formula#Formulation) for more details.
+- There are several methods with accuracy and simplicity trade-offs.
+:::
+::::
+
+## Haversine Calculation
+
+It is best to let packages/libraries to handle this for you.
+
+:::: {.columns}
+::: {.column}
+*Python*: [`haversine`](https://pypi.org/project/haversine/)
+```python
+from haversine import haversine
+
+loc1 = (lat1, lng1)
+loc2 = (lat2, lng2)
+
+haversine(loc1, loc2, unit='km')
+```
+:::
+::: {.column}
+*R*: [`{geosphere}`](https://github.com/rspatial/geosphere/tree/master)
+
+```r
+library(geosphere)
+
+loc1 <- c(lat1, lng1)
+loc2 <- c(lat2, lng2)
+
+distHaversine(loc1, loc2)
+```
+:::
+::::
+
+
+## Ellipsoidal Distance
+
+- Spherical distance is probably fine, but the Earth isn't an exact sphere.
+  - Discovered by Newton in 1687.
+- [Vincenty's formulae](https://en.wikipedia.org/wiki/Vincenty's_formulae) (1975) can be used for distances on a spheroid.
+- The formulae are complicated, requiring spherical coordinates and calculus.
+- The exact solution depends on what GCS you are using.
+
+. . .
+
+- I'm don't going to confuse you with the calculation. I would also be confused.
+
+## Ellipsoidal Calculation
+
+Again, it is best to let packages/libraries to handle this for you.
+
+:::: {.columns}
+::: {.column}
+*Python*: [`vincenty`](https://pypi.org/project/vincenty/)
+
+```python
+from vincenty import vincenty
+
+loc1 = (lat1, lng1)
+loc2 = (lat2, lng2)
+
+vincenty(loc1, loc2)
+```
+:::
+::: {.column}
+*R*: [`{geosphere}`](https://github.com/rspatial/geosphere/tree/master)
+
+```r
+library(geosphere)
+
+loc1 <- c(lat1, lng1)
+loc2 <- c(lat2, lng2)
+
+distVincentyEllipsoid(loc1, loc2) # result is in kilometers
+```
+:::
+::::
+
+# Lab Time
+

@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/tabby.min.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.31">
+
+  <meta name="author" content="S. L. Carter">
+  <meta name="dcterms.date" content="2025-10-01">
+  <title>Distance Calculations in Spatial Analysis</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto-f824dc330bc4692560f1b715fc78ef24.css">
+  <link rel="stylesheet" href="style.css">
+  <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Distance Calculations in Spatial Analysis</h1>
+  <p class="subtitle">Application in R</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+S. L. Carter 
+</div>
+        <p class="quarto-title-affiliation">
+            University of Toledo
+          </p>
+    </div>
+</div>
+
+  <p class="date">October 1, 2025</p>
+</section>
+<section>
+<section id="introduction" class="title-slide slide level1 center">
+<h1>Introduction</h1>
+
+</section>
+<section id="objectives" class="slide level2 scrollable">
+<h2>Objectives</h2>
+<ol type="1">
+<li class="fragment">Understand why considering distance is important.</li>
+<li class="fragment">Understand the different types of distance calculations.</li>
+<li class="fragment">Know how to apply the calculations in software.</li>
+</ol>
+</section>
+<section id="motivation" class="slide level2">
+<h2>Motivation</h2>
+<p>Why should we care about distance?</p>
+
+<img data-src="images/city-grid.jpg" style="width:50.0%" class="r-stretch quarto-figure-center"><p class="caption">Salt Lake City, Utah at Night (<a href="https://www.flickr.com/photos/nasa2explore/11802833823">NASA2Explore on Flickr</a>)</p></section>
+<section id="real-life-example" class="slide level2 scrollable">
+<h2>Real Life Example</h2>
+<p>Say you need to go to the grocery store.</p>
+<div class="fragment">
+<p>What factors do you consider when deciding which store to pick?</p>
+</div>
+<div class="fragment">
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Factors</a></li><li><a href="#tabset-1-2">Map</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<ol type="1">
+<li>Prices/Value of Groceries</li>
+<li>Location</li>
+<li>Available Modes and Costs of Transportation</li>
+<li>Personal Preference</li>
+</ol>
+</div>
+<div id="tabset-1-2">
+<iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d46292.00611085444!2d-83.62762421690506!3d41.66172841621049!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sgrocery%20store!5e1!3m2!1sen!2sus!4v1758388765125!5m2!1sen!2sus" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="statistical-example" class="slide level2">
+<h2>Statistical Example</h2>
+<div title="College Enrollment Choices">
+<div class="callout callout-caution callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>College Enrollment Choices</strong></p>
+</div>
+<div class="callout-content">
+<p>Students consider distance and location when choosing where to go to college.</p>
+<p><strong>Question</strong>: <em>What kind of relationship could distance have with the probability of enrollment?</em></p>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="center-x">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-stat-example" class="quarto-float quarto-figure quarto-figure-center" width="480">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-stat-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="index_files/figure-revealjs/fig-stat-example-1.png" id="fig-stat-example" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-stat-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="outline" class="slide level2">
+<h2>Outline</h2>
+<div title="Wednesday 10/1/2025">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Wednesday 10/1/2025</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>Definition, history, and application of two types of distance in Euclidean geometry.
+<ul>
+<li>Plus a game and bonus topic.</li>
+</ul></li>
+<li>Basic exploration into using Python/R to calculate distance.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div title="Monday 10/6/2025">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Monday 10/6/2025</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>Definition of spherical distance calculations.</li>
+<li>Lab/Workshop using R to calculate distances for real-life data.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="distance-in-euclidean-geometry" class="title-slide slide level1 center">
+<h1>Distance in Euclidean Geometry</h1>
+
+</section>
+<section id="types-of-distance-calculations" class="slide level2">
+<h2>Types of Distance Calculations</h2>
+<div class="center-y">
+<ul>
+<li>Euclidean</li>
+<li>Manhattan</li>
+<li>(Bonus) Generalization</li>
+</ul>
+</div>
+</section>
+<section id="euclidean-distance" class="slide level2">
+<h2>Euclidean Distance</h2>
+<p>(Also known as the Pythagorean Distance.)</p>
+<p>What is the formula?</p>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{aligned}
+d^2 &amp;= {(\Delta x)}^2 + {(\Delta y)}^2 \\
+d &amp;= \sqrt{{(\Delta x)}^2 + {(\Delta y)}^2}
+\end{aligned}
+\]</span></p>
+</div>
+<div class="fragment">
+<p>What does that look like?</p>
+</div>
+<div class="fragment">
+<div class="center-x">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-euclidean" class="quarto-float quarto-figure quarto-figure-center" width="288">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-euclidean-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="index_files/figure-revealjs/fig-euclidean-3.png" id="fig-euclidean" width="288">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-euclidean-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="euclidean-distance-history" class="slide level2">
+<h2>Euclidean Distance (History)</h2>
+<div class="center-y">
+<ul>
+<li>Named after Greek mathematician <a href="https://en.wikipedia.org/wiki/Euclid">Euclid</a> (~300 BC).</li>
+<li>Similar to the Pythagorean theorem.</li>
+<li>Published in 1731 by Alexis Clairaut.</li>
+</ul>
+</div>
+</section>
+<section id="euclidean-distance-application" class="slide level2">
+<h2>Euclidean Distance (Application)</h2>
+<p>What would you use this for?</p>
+<div class="fragment">
+<ul>
+<li>Geography: Measuring distance across <em>flat</em> surfaces.</li>
+<li>Physics: Measuring distance between two objects.</li>
+<li>Computer Science
+<ul>
+<li>Clustering algorithms in machine learning.</li>
+<li>Similarity metrics. (Easily extended to higher dimensions.)</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="manhattan-distance" class="slide level2">
+<h2>Manhattan Distance</h2>
+<p>What might this be?</p>
+<p><em>Hint</em>: Think about the name…</p>
+<div class="fragment">
+<ul>
+<li>Distance following a grid pattern.</li>
+<li>It is also called the taxicab or city block distance referring to street layouts in large cities.</li>
+</ul>
+</div>
+</section>
+<section id="manhattan-distance-1" class="slide level2">
+<h2>Manhattan Distance</h2>
+<p>What is the formula?</p>
+<div class="fragment">
+<p><span class="math display">\[
+d = |x_2 - x_1| + |y_2 - y_1|
+\]</span></p>
+<div class="center-x">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-manhattan" class="quarto-float quarto-figure quarto-figure-center" width="288">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-manhattan-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="index_files/figure-revealjs/fig-manhattan-1.png" id="fig-manhattan" width="288">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-manhattan-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="manhattan-distance-history" class="slide level2">
+<h2>Manhattan Distance (History)</h2>
+<div class="center-y">
+<ul>
+<li>First used in 1757 by Roger Joseph Boscovich.</li>
+<li>The taxicab name came from Karl Menger in 1952.</li>
+</ul>
+</div>
+</section>
+<section id="manhattan-distance-application" class="slide level2">
+<h2>Manhattan Distance (Application)</h2>
+<div class="center-y">
+<ul>
+<li>Regression Analysis
+<ul>
+<li>Calculating residuals (one dimensional)</li>
+</ul></li>
+<li>Transportation
+<ul>
+<li>Driving distance; distance along a path.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="side-quest" class="slide level2">
+<h2>Side Quest</h2>
+<div class="center-y">
+<ul>
+<li>The numbers on a Minesweeper board can be thought of as a count of bombs with a Chebyshev distance of one.</li>
+<li>Chebyshev distance is basically Manhattan distance but you take the longer of the two dimensions.</li>
+</ul>
+<div class="center-x">
+<p><a href="https://share.google/A8GwhLEpInZkv5YSS" class="uri">https://share.google/A8GwhLEpInZkv5YSS</a></p>
+<p>(or search Minesweeper on Google)</p>
+</div>
+<ul>
+<li>Chebyshev distance has application in board games. Think of moving based on a dice roll.</li>
+</ul>
+</div>
+</section>
+<section id="visualization" class="slide level2">
+<h2>Visualization</h2>
+
+<img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Minkowski_distance_examples.svg/800px-Minkowski_distance_examples.svg.png" class="r-stretch quarto-figure-center"><p class="caption">By Cmglee - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=140170366</p></section>
+<section id="bonus-generalized-distance-in-euclidean-geometry" class="slide level2">
+<h2><em>Bonus</em>: Generalized Distance in Euclidean Geometry</h2>
+<p>How can we generalize our distance formulas into a single equation?</p>
+<div class="fragment">
+<p><span class="math display">\[
+D(X,Y) = \left(\sum_{i=1}^n {|x_i - y_i|}^p \right)^{1/p}
+\]</span></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th>Distance Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Manhattan</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Euclidean</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\infty\)</span></td>
+<td>Chebyshev</td>
+</tr>
+</tbody>
+</table>
+<p>This also connects to <a href="https://en.wikipedia.org/wiki/Lp_space">Lebesgue spaces</a> (<span class="math inline">\(L^p\)</span>) in mathematics.</p>
+</div>
+</section>
+<section id="visualization-1" class="slide level2">
+<h2>Visualization</h2>
+
+<img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Vector-p-Norms_qtl1.svg/800px-Vector-p-Norms_qtl1.svg.png" class="r-stretch quarto-figure-center"><p class="caption">By Quartl - Own work, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=17428655</p></section></section>
+<section>
+<section id="exploration-in-python-and-r" class="title-slide slide level1 center">
+<h1>Exploration in Python and R</h1>
+
+</section>
+<section id="manhattan-distance-2" class="slide level2">
+<h2>Manhattan Distance</h2>
+<p><span class="math display">\[
+\begin{aligned}
+D(A,B) &amp;= |a_1 - b_1| + |a_2 - b_2| \\
+&amp;= \sum_{i=1}^n |a_i - b_i|
+\end{aligned}
+\]</span></p>
+<div class="columns">
+<div class="column">
+<p><em>Python</em></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="kw">def</span> manhattan(a1, a2, b1, b2):</span>
+<span id="cb1-2"><a href=""></a>  d <span class="op">=</span> <span class="bu">abs</span>(a1 <span class="op">-</span> b1) <span class="op">+</span> <span class="bu">abs</span>(a2 <span class="op">-</span> b2)</span>
+<span id="cb1-3"><a href=""></a>  </span>
+<span id="cb1-4"><a href=""></a>  <span class="cf">return</span> d</span>
+<span id="cb1-5"><a href=""></a></span>
+<span id="cb1-6"><a href=""></a><span class="kw">def</span> manhattan(a, b):</span>
+<span id="cb1-7"><a href=""></a>  d <span class="op">=</span> <span class="bu">sum</span>(<span class="bu">abs</span>(a_i <span class="op">-</span> b_i) <span class="cf">for</span> a_i, b_i <span class="kw">in</span> <span class="bu">zip</span>(a,b))</span>
+<span id="cb1-8"><a href=""></a>  </span>
+<span id="cb1-9"><a href=""></a>  <span class="cf">return</span> d</span>
+<span id="cb1-10"><a href=""></a></span>
+<span id="cb1-11"><a href=""></a><span class="im">from</span> scipy.spatial.distance <span class="im">import</span> cityblock</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<p><em>R</em></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a>manhattan <span class="ot">&lt;-</span> <span class="cf">function</span>(a1, a2, b1, b2) {</span>
+<span id="cb2-2"><a href=""></a>  d <span class="ot">&lt;-</span> <span class="fu">abs</span>(a1 <span class="sc">-</span> b1) <span class="sc">+</span> <span class="fu">abs</span>(a2 <span class="sc">-</span> b2)</span>
+<span id="cb2-3"><a href=""></a></span>
+<span id="cb2-4"><a href=""></a>  <span class="fu">return</span>(d)</span>
+<span id="cb2-5"><a href=""></a>}</span>
+<span id="cb2-6"><a href=""></a></span>
+<span id="cb2-7"><a href=""></a>manhattan <span class="ot">&lt;-</span> <span class="cf">function</span>(a, b) {</span>
+<span id="cb2-8"><a href=""></a>  d <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">abs</span>(a <span class="sc">-</span> b))</span>
+<span id="cb2-9"><a href=""></a></span>
+<span id="cb2-10"><a href=""></a>  <span class="fu">return</span>(d)</span>
+<span id="cb2-11"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+</section>
+<section id="euclidean-distance-1" class="slide level2">
+<h2>Euclidean Distance</h2>
+<p><span class="math display">\[
+\begin{aligned}
+D(A,B) &amp;= \sqrt{{(a_1 - b_1)}^2 + {(a_2 - b_2)}^2} \\
+&amp;= \left(\sum_{i=1}^n {(a_i - b_i)}^2\right)^{1/2}
+\end{aligned}
+\]</span></p>
+<div class="columns">
+<div class="column">
+<p><em>Python</em></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="im">import</span> math</span>
+<span id="cb3-2"><a href=""></a></span>
+<span id="cb3-3"><a href=""></a><span class="kw">def</span> euclidean(a1, a2, b1, b2):</span>
+<span id="cb3-4"><a href=""></a>  d <span class="op">=</span> math.sqrt((a1 <span class="op">-</span> b1)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> (a2 <span class="op">-</span> b2)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb3-5"><a href=""></a>  </span>
+<span id="cb3-6"><a href=""></a>  <span class="cf">return</span> d</span>
+<span id="cb3-7"><a href=""></a></span>
+<span id="cb3-8"><a href=""></a><span class="kw">def</span> euclidean(a, b):</span>
+<span id="cb3-9"><a href=""></a>  d <span class="op">=</span> math.sqrt(<span class="bu">sum</span>((a_i <span class="op">-</span> b_i)<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> a_i, b_i <span class="kw">in</span> <span class="bu">zip</span>(a,b)))</span>
+<span id="cb3-10"><a href=""></a>  </span>
+<span id="cb3-11"><a href=""></a>  <span class="cf">return</span> d</span>
+<span id="cb3-12"><a href=""></a></span>
+<span id="cb3-13"><a href=""></a><span class="im">from</span> scipy.spatial.distance <span class="im">import</span> euclidean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<p><em>R</em></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>euclidean <span class="ot">&lt;-</span> <span class="cf">function</span>(a1, a2, b1, b2) {</span>
+<span id="cb4-2"><a href=""></a>  d <span class="ot">&lt;-</span> <span class="fu">sqrt</span>((a1 <span class="sc">-</span> b1)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> (a2 <span class="sc">-</span> b2)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb4-3"><a href=""></a></span>
+<span id="cb4-4"><a href=""></a>  <span class="fu">return</span>(d)</span>
+<span id="cb4-5"><a href=""></a>}</span>
+<span id="cb4-6"><a href=""></a></span>
+<span id="cb4-7"><a href=""></a>euclidean <span class="ot">&lt;-</span> <span class="cf">function</span>(a, b) {</span>
+<span id="cb4-8"><a href=""></a>  d <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((a <span class="sc">-</span> b)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb4-9"><a href=""></a></span>
+<span id="cb4-10"><a href=""></a>  <span class="fu">return</span>(d)</span>
+<span id="cb4-11"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+</section>
+<section id="homework" class="slide level2">
+<h2>Homework</h2>
+<div class="center-y">
+<ul>
+<li>Please install the <a href="https://jakubnowosad.com/spData/index.html"><code>{spData}</code></a> package for R. It has a dataset which we will be using on Monday.
+<ul>
+<li>You will also need <a href="https://cran.rstudio.com/">R</a>, <a href="https://www.tidyverse.org/"><code>{tidyverse}</code></a>, <a href="https://r-spatial.github.io/sf/"><code>{sf}</code></a>, and <a href="https://github.com/rspatial/geosphere"><code>{geosphere}</code></a> installed; it is free and works on Windows and Mac just fine (and Linux with some difficulty).</li>
+<li>Email me or see me after class tomorrow if would like help with installation.</li>
+</ul></li>
+<li>On Monday we will go through calculating distance with Lucas county housing prices.</li>
+</ul>
+</div>
+</section>
+<section id="homework-bonus" class="slide level2">
+<h2>Homework (Bonus)</h2>
+<div class="center-y">
+<ul>
+<li>Write a Python and/or R function to generalize distance in Euclidean geometry.</li>
+<li>Try to use the function a few times to make sure it works correctly for <span class="math inline">\(p\)</span> equal to 1, 2, and (optionally) <span class="math inline">\(\infty\)</span>.</li>
+<li>AI should be helpful if you get stuck.</li>
+</ul>
+<p><span class="math display">\[
+D(X,Y) = \left(\sum_{i=1}^n {|x_i - y_i|}^p \right)^{1/p}
+\]</span></p>
+</div>
+</section></section>
+<section>
+<section id="spherical-geometry" class="title-slide slide level1 center">
+<h1>Spherical Geometry</h1>
+
+</section>
+<section id="geographical-distance-methods" class="slide level2">
+<h2>Geographical Distance Methods</h2>
+<ul>
+<li>There are several levels of complexity to measure distance on Earth.
+<ul>
+<li>Euclidean distance. (Think back to last class.)</li>
+<li>Spherical distance.</li>
+<li>Ellipsoidal distance.</li>
+</ul></li>
+<li>The best choice depends on your needed accuracy.
+<ul>
+<li>What scenarios would be suited to each type of distance?</li>
+</ul></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Euclidean distance
+<ul>
+<li>Local, short-range points; e.g.&nbsp;At a city or neighborhood level.</li>
+</ul></li>
+<li>Spherical distance
+<ul>
+<li>Longer distances where accuracy is important but not absolutely critical. (Has about 0.5% error, <a href="https://en.wikipedia.org/wiki/Great-circle_distance#Radius_for_spherical_Earth">Wikipedia</a>.)</li>
+</ul></li>
+<li>Ellipsoidal distance
+<ul>
+<li>Long distances where you want to be <em>very</em> accurate.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="spherical-distance" class="slide level2">
+<h2>Spherical Distance</h2>
+<p>It’s complicated…</p>
+<div class="columns">
+<div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Central_angle.svg/800px-Central_angle.svg.png"></p>
+<figcaption>By CheCheDaWaff - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=48462269</figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:70%;">
+<p><span class="math display">\[
+\text{hav}(\Delta\sigma) = \text{hav}(\Delta\phi) + \cos(\phi_1)\cos(\phi_2)\text{hav}(\Delta\lambda)
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\phi\)</span> is latitude, <span class="math inline">\(\lambda\)</span> is longitude.</li>
+<li><span class="math inline">\(\Delta\sigma\)</span> is the central angle (in degrees) between the points.</li>
+<li><span class="math inline">\(\text{hav}(\Delta\sigma) = \sin^2\left(\frac{\Delta\sigma}{2}\right)\)</span></li>
+<li>Then the distance is <span class="math inline">\(\Delta\sigma\)</span> converted to radians and multiplied by the average radius of the Earth, <span class="math inline">\(D(P,Q) = r \cdot \Delta\sigma\)</span>.</li>
+<li>See <a href="https://en.wikipedia.org/wiki/Haversine_formula#Formulation">Wikipedia</a> for more details.</li>
+<li>There are several methods with accuracy and simplicity trade-offs.</li>
+</ul>
+</div></div>
+</section>
+<section id="haversine-calculation" class="slide level2">
+<h2>Haversine Calculation</h2>
+<p>It is best to let packages/libraries to handle this for you.</p>
+<div class="columns">
+<div class="column">
+<p><em>Python</em>: <a href="https://pypi.org/project/haversine/"><code>haversine</code></a></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="im">from</span> haversine <span class="im">import</span> haversine</span>
+<span id="cb5-2"><a href=""></a></span>
+<span id="cb5-3"><a href=""></a>loc1 <span class="op">=</span> (lat1, lng1)</span>
+<span id="cb5-4"><a href=""></a>loc2 <span class="op">=</span> (lat2, lng2)</span>
+<span id="cb5-5"><a href=""></a></span>
+<span id="cb5-6"><a href=""></a>haversine(loc1, loc2, unit<span class="op">=</span><span class="st">'km'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<p><em>R</em>: <a href="https://github.com/rspatial/geosphere/tree/master"><code>{geosphere}</code></a></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="fu">library</span>(geosphere)</span>
+<span id="cb6-2"><a href=""></a></span>
+<span id="cb6-3"><a href=""></a>loc1 <span class="ot">&lt;-</span> <span class="fu">c</span>(lat1, lng1)</span>
+<span id="cb6-4"><a href=""></a>loc2 <span class="ot">&lt;-</span> <span class="fu">c</span>(lat2, lng2)</span>
+<span id="cb6-5"><a href=""></a></span>
+<span id="cb6-6"><a href=""></a><span class="fu">distHaversine</span>(loc1, loc2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+</section>
+<section id="ellipsoidal-distance" class="slide level2">
+<h2>Ellipsoidal Distance</h2>
+<ul>
+<li>Spherical distance is probably fine, but the Earth isn’t an exact sphere.
+<ul>
+<li>Discovered by Newton in 1687.</li>
+</ul></li>
+<li><a href="https://en.wikipedia.org/wiki/Vincenty's_formulae">Vincenty’s formulae</a> (1975) can be used for distances on a spheroid.</li>
+<li>The formulae are complicated, requiring spherical coordinates and calculus.</li>
+<li>The exact solution depends on what GCS you are using.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>I’m don’t going to confuse you with the calculation. I would also be confused.</li>
+</ul>
+</div>
+</section>
+<section id="ellipsoidal-calculation" class="slide level2">
+<h2>Ellipsoidal Calculation</h2>
+<p>Again, it is best to let packages/libraries to handle this for you.</p>
+<div class="columns">
+<div class="column">
+<p><em>Python</em>: <a href="https://pypi.org/project/vincenty/"><code>vincenty</code></a></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="im">from</span> vincenty <span class="im">import</span> vincenty</span>
+<span id="cb7-2"><a href=""></a></span>
+<span id="cb7-3"><a href=""></a>loc1 <span class="op">=</span> (lat1, lng1)</span>
+<span id="cb7-4"><a href=""></a>loc2 <span class="op">=</span> (lat2, lng2)</span>
+<span id="cb7-5"><a href=""></a></span>
+<span id="cb7-6"><a href=""></a>vincenty(loc1, loc2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<p><em>R</em>: <a href="https://github.com/rspatial/geosphere/tree/master"><code>{geosphere}</code></a></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">library</span>(geosphere)</span>
+<span id="cb8-2"><a href=""></a></span>
+<span id="cb8-3"><a href=""></a>loc1 <span class="ot">&lt;-</span> <span class="fu">c</span>(lat1, lng1)</span>
+<span id="cb8-4"><a href=""></a>loc2 <span class="ot">&lt;-</span> <span class="fu">c</span>(lat2, lng2)</span>
+<span id="cb8-5"><a href=""></a></span>
+<span id="cb8-6"><a href=""></a><span class="fu">distVincentyEllipsoid</span>(loc1, loc2) <span class="co"># result is in kilometers</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+</section></section>
+<section id="lab-time" class="title-slide slide level1 center">
+<h1>Lab Time</h1>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>SISS7020</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="index_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="index_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="index_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="index_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="index_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="index_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': true,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
+            }
+            return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
