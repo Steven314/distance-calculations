@@ -728,7 +728,7 @@ D(X,Y) = \left(\sum_{i=1}^n {|x_i - y_i|}^p \right)^{1/p}
 </ul>
 <div class="fragment">
 <ul>
-<li>I’m don’t going to confuse you with the calculation. I would also be confused.</li>
+<li>I’m not going to confuse you with the calculation. I would also be confused.</li>
 </ul>
 </div>
 </section>
@@ -752,6 +752,70 @@ D(X,Y) = \left(\sum_{i=1}^n {|x_i - y_i|}^p \right)^{1/p}
 <span id="cb8-4"><a href=""></a>loc2 <span class="ot">&lt;-</span> <span class="fu">c</span>(lat2, lng2)</span>
 <span id="cb8-5"><a href=""></a></span>
 <span id="cb8-6"><a href=""></a><span class="fu">distVincentyEllipsoid</span>(loc1, loc2) <span class="co"># result is in kilometers</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+</section></section>
+<section>
+<section id="quick-summary-of-open-source-r" class="title-slide slide level1 center">
+<h1>Quick Summary of Open Source &amp; R</h1>
+
+</section>
+<section id="open-source" class="slide level2">
+<h2>Open Source</h2>
+<ul>
+<li>There are variations:
+<ul>
+<li>Open Source Software (OSS)</li>
+<li>Free and Open Source Software (FOSS)</li>
+<li>Free/Libre and Open Software (FLOSS)</li>
+</ul></li>
+<li>See <a href="https://www.gnu.org/philosophy/floss-and-foss.en.html">GNU post on FLOSS and FOSS</a>.</li>
+<li>“Free” is short for “Freedom,” which does not necessarily mean having no monetary cost.</li>
+<li>Commonly, many individuals collaborate on a project in which they have interest.
+<ul>
+<li>GitHub is the most popular site for this.</li>
+<li>Others are GitBucket, Gitea, GitLab, Codeberg.</li>
+</ul></li>
+</ul>
+</section>
+<section id="r" class="slide level2">
+<h2>R</h2>
+<p>These are the packages we will be using:</p>
+<ul>
+<li><code>{tidyverse}</code> - A collection of other packages which cover data importing, processing, and plotting. Very useful and very popular.</li>
+<li><code>{sf}</code> - Simple Features - Builds on <code>{tibble}</code> to work with spatial data.</li>
+<li><code>{geosphere}</code> - Performing calculations with coordinates. (Somewhat older, perhaps there is a superior alternative.)</li>
+</ul>
+<p><a href="https://r4ds.hadley.nz/">R for Data Science</a> is a great introductory resource for learning R.</p>
+</section>
+<section id="what-is-a-tibble" class="slide level2">
+<h2>What is a <code>tibble</code>?</h2>
+<ul>
+<li>A list of lists.</li>
+<li>It is different from the standard <code>data.frame</code> in R, but many of the same concepts apply.</li>
+<li>The functions and abilities of the <code>tidyverse</code> are built around the <code>tibble</code>.</li>
+</ul>
+<div class="columns">
+<div class="column">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://adv-r.hadley.nz/diagrams/vectors/data-frame-2.png"></p>
+<figcaption>Image depicting a <code>tibble</code>. <em>Advanced R</em> by Hadley Wickam: section 3.6.1</figcaption>
+</figure>
+</div>
+</div><div class="column">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">library</span>(tibble)</span>
+<span id="cb9-2"><a href=""></a><span class="fu">tibble</span>(</span>
+<span id="cb9-3"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>),</span>
+<span id="cb9-4"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>)</span>
+<span id="cb9-5"><a href=""></a>)</span>
+<span id="cb9-6"><a href=""></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span id="cb9-7"><a href=""></a><span class="co">#&gt;       x y    </span></span>
+<span id="cb9-8"><a href=""></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;</span></span>
+<span id="cb9-9"><a href=""></a><span class="co">#&gt; 1     1 a    </span></span>
+<span id="cb9-10"><a href=""></a><span class="co">#&gt; 2     2 b    </span></span>
+<span id="cb9-11"><a href=""></a><span class="co">#&gt; 3     3 c</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div></div>
 </section></section>
 <section id="lab-time" class="title-slide slide level1 center">

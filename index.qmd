@@ -20,6 +20,10 @@ format:
     footer: SISS7020
 editor_options: 
   chunk_output_type: console
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>" 
 ---
 
 # Introduction
@@ -519,7 +523,7 @@ distHaversine(loc1, loc2)
 
 . . .
 
-- I'm don't going to confuse you with the calculation. I would also be confused.
+- I'm not going to confuse you with the calculation. I would also be confused.
 
 ## Ellipsoidal Calculation
 
@@ -552,5 +556,52 @@ distVincentyEllipsoid(loc1, loc2) # result is in kilometers
 :::
 ::::
 
-# Lab Time
+# Quick Summary of Open Source & R
 
+## Open Source
+
+- There are variations:
+  - Open Source Software (OSS)
+  - Free and Open Source Software (FOSS)
+  - Free/Libre and Open Software (FLOSS)
+- See [GNU post on FLOSS and FOSS](https://www.gnu.org/philosophy/floss-and-foss.en.html).
+- "Free" is short for "Freedom," which does not necessarily mean having no monetary cost.
+- Commonly, many individuals collaborate on a project in which they have interest.
+  - GitHub is the most popular site for this.
+  - Others are GitBucket, Gitea, GitLab, Codeberg.
+
+## R
+
+These are the packages we will be using:
+
+- `{tidyverse}` - A collection of other packages which cover data importing, processing, and plotting. Very useful and very popular.
+- `{sf}` - Simple Features - Builds on `{tibble}` to work with spatial data.
+- `{geosphere}` - Performing calculations with coordinates. (Somewhat older, perhaps there is a superior alternative.)
+
+[R for Data Science](https://r4ds.hadley.nz/) is a great introductory resource for learning R.
+
+## What is a `tibble`?
+
+- A list of lists.
+- It is different from the standard `data.frame` in R, but many of the same concepts apply.
+- The functions and abilities of the `tidyverse` are built around the `tibble`.
+
+:::: {.columns}
+:::{.column}
+![Image depicting a `tibble`. *Advanced R* by Hadley Wickam: section 3.6.1](https://adv-r.hadley.nz/diagrams/vectors/data-frame-2.png)
+:::
+::: {.column}
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+library(tibble)
+tibble(
+  x = c(1, 2, 3),
+  y = c("a", "b", "c")
+)
+```
+:::
+::::
+
+# Lab Time
