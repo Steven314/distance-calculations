@@ -596,6 +596,7 @@ These are the packages we will be using:
 #| warning: false
 #| message: false
 library(tibble)
+
 tibble(
   x = c(1, 2, 3),
   y = c("a", "b", "c")
@@ -604,4 +605,6 @@ tibble(
 :::
 ::::
 
-# Lab Time
+## Lab Time {.center}
+
+[slcarter.com/posts/2025-10-06-distance-lab](https://slcarter.com/posts/2025-10-06-distance-lab/)
